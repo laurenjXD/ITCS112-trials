@@ -1,0 +1,49 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from PIL import Image
+
+
+# Function to compute Pascal's triangle up to row n
+def pascal_triangle(n):
+    triangle = [[1]]
+    for i in range(1, n):
+        row = [1]
+        for j in range(1, i):
+            row.append(triangle[i-1][j-1] + triangle[i-1][j])
+        row.append(1)
+        triangle.append(row)
+    return triangle
+
+# Function to convert a number to binary and return as a list of bits
+def num_to_binary_list(num, length):
+    return [int(bit) for bit in format(num, f'0{length}b')]
+
+# Parameters
+n_rows = 20  # Number of rows of Pascal's triangle to generate
+max_bin_length = len(bin(2**(n_rows - 1))[2:])  # Max binary length
+
+# Generate Pascal's triangle
+triangle = pascal_triangle(n_rows)
+
+# Prepare the figure
+fig, ax = plt.subplots()
+ax.set_xticks([])
+ax.set_yticks([])
+im = ax.imshow(np.zeros((max_bin_length, n_rows)), cmap='gray', vmin=0, vmax=1)
+
+# Function to update each frame
+def update(frame):
+    row = triangle[frame]
+    bin_matrix = np.array([num_to_binary_list(num, max_bin_length) for num in row]).T
+    im.set_array(bin_matrix)
+    ax.set_title(f"Row {frame} of Pascal's Triangle")
+    return [im]
+
+# Create animation
+ani = FuncAnimation(fig, update, frames=n_rows, interval=500, blit=True)
+
+# Save animation as GIF (optional)
+ani.save('pascals_triangle_animation.gif', writer='imagemagick')
+
+plt.show()
