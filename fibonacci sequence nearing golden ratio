@@ -1,0 +1,19 @@
+# Calculate the ratios of Fibonacci numbers and compare them to the golden ratio
+def fibonacci_ratios(n_terms):
+    ratios = []
+    fibonacci_numbers = [1, 1]
+    
+    # Generate Fibonacci numbers
+    for _ in range(2, n_terms):
+        fibonacci_numbers.append(fibonacci_numbers[-1] + fibonacci_numbers[-2])
+    
+    # Calculate the ratios of successive Fibonacci numbers
+    for i in range(2, n_terms):
+        ratio = fibonacci_numbers[i-1] / fibonacci_numbers[i]
+        ratios.append((fibonacci_numbers[i-1], fibonacci_numbers[i], ratio))
+    
+    return ratios
+
+# Calculate ratios for the first 20 Fibonacci numbers
+ratios = fibonacci_ratios(20)
+ratios
